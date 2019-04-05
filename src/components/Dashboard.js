@@ -29,9 +29,7 @@ const Dashboard = ({ classes }) => {
     const [isSnackbarOpen, setSnackbarOpen] = useState(false)
     const closeSnackbar = useCallback(() => setSnackbarOpen(false));
     useEffect(() => error && setSnackbarOpen(true), [error])
-    const { user, isSignedIn } = useContext(UserContext);
-
-  
+    const { user, isSigningIn, isSignedIn } = useContext(UserContext);
 
     return (
         <Fragment>
@@ -56,21 +54,24 @@ const Dashboard = ({ classes }) => {
                             />
                         </Snackbar>
                     }
-                    {!isSignedIn ?
-                        <div>Please sign-in</div> :
-                        <Fragment>
-                            <Greeting user={user} />
-                            <Card>
-                                <CardContent>
-                                    <TimeReportSubmitForm onSubmit={fetch} isLoading={isLoading} />
-                                </CardContent>
-                            </Card>
-                            <Typography variant="h4">Overview <span role="img" aria-label="overview">👓</span></Typography>
-                            <TimeReportingTable
-                                data={data}
-                                error={error}
-                            />
-                        </Fragment>
+                    {
+                        isSigningIn ?
+                            <div>Logging you in</div> :
+                            !isSignedIn ?
+                                <div>Please sign-in</div> :
+                                <Fragment>
+                                    <Greeting user={user} />
+                                    <Card>
+                                        <CardContent>
+                                            <TimeReportSubmitForm onSubmit={fetch} isLoading={isLoading} />
+                                        </CardContent>
+                                    </Card>
+                                    <Typography variant="h4">Overview <span role="img" aria-label="overview">👓</span></Typography>
+                                    <TimeReportingTable
+                                        data={data}
+                                        error={error}
+                                    />
+                                </Fragment>
                     }
                 </div>
             </div>

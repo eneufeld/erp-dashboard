@@ -18,10 +18,7 @@ const Header = ({ classes }) => {
         <React.Fragment>
             <UserContext.Consumer>
                 {
-                    ({ isSignedIn, signIn, signOut, isSigningIn, setSigningIn, user }) => {
-                        if (isSigningIn) {
-                            return <div>Logging you in</div>
-                        }
+                    ({ isSignedIn, signIn, signOut, user }) => {
                         return (
                           <AppBar position="static">
                             <Toolbar>
@@ -63,14 +60,7 @@ const Header = ({ classes }) => {
                                 <Button
                                   id="signin-button"
                                   className={classes.button}
-                                  onClick={() => {
-                                    setSigningIn(true);
-                                    signIn().then(() =>
-                                      setSigningIn(
-                                        false
-                                      )
-                                    );
-                                  }}
+                                  onClick={signIn}
                                 >
                                   Sign In
                                 </Button>
