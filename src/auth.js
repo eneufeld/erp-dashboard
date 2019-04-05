@@ -2,7 +2,7 @@ export const getAuthInstance = () => window.gapi.auth2.getAuthInstance();
 
 export const isSignedIn = () => getAuthInstance().isSignedIn().get()
 
-export const initClient = (onSignIn) => {
+export const initClient = (onSignIn, onSignOut) => {
 
     if (process.env.REACT_APP_API_KEY === undefined) {
         console.error("API_KEY key not configured")
@@ -30,7 +30,7 @@ export const initClient = (onSignIn) => {
 
             })
             .then(() => {
-                window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus(onSignIn));
+                window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus(onSignIn, onSignOut));
                 // Handle initial sign-in state
                 updateSignInStatus(onSignIn)(window.gapi.auth2.getAuthInstance().isSignedIn.get());
             });
@@ -38,16 +38,18 @@ export const initClient = (onSignIn) => {
     window.gapi.load('client:auth2', start)
 }
 
-export const updateSignInStatus = onSignIn => isSignedIn => {
+export const updateSignInStatus = (onSignIn, onSignOut) => isSignedIn => {
     if (isSignedIn) {
         onSignIn(isSignedIn, window.gapi.auth2.getAuthInstance().currentUser.get());
+    } else {
+        onSignOut();
     }
 }
 
-export function signIn() {
+export function signIn(cb) {
     // Ideally the button should only show up after gapi.client.init finishes, so that this
     // handler won't be called before OAuth is initialized.
-    return window.gapi.auth2.getAuthInstance().signIn();
+    return window.gapi.auth2.getAuthInstance().signIn().then(cb);
 }
 
 export function signOut() {

@@ -31,11 +31,16 @@ const App = () => {
   const [user, setUser] = useState(null)
   useEffect(
     () => {
-      window.gapi.load('client', initClient((isSignedIn, user) => {
+      const onSignIn = (isSignedIn, user) => {
         setSignedIn(isSignedIn);
-        setSigningIn(false)
-        setUser(user)
-      }))
+        setSigningIn(false);
+        setUser(user);
+      };
+      const onSignOut = () => {
+        setSignedIn(false);
+        setUser(null);
+      };
+      window.gapi.load('client', initClient(onSignIn, onSignOut));
       return () => {
         setSignedIn(false);
         setUser(null);
