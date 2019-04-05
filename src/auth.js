@@ -30,9 +30,9 @@ export const initClient = (onSignIn, onSignOut) => {
 
             })
             .then(() => {
-                window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus(onSignIn, onSignOut));
-                // Handle initial sign-in state
-                updateSignInStatus(onSignIn)(window.gapi.auth2.getAuthInstance().isSignedIn.get());
+                    window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus(onSignIn, onSignOut));
+                    // Handle initial sign-in state
+                    updateSignInStatus(onSignIn, onSignOut)(window.gapi.auth2.getAuthInstance().isSignedIn.get());
             });
     }
     window.gapi.load('client:auth2', start)
@@ -46,13 +46,15 @@ export const updateSignInStatus = (onSignIn, onSignOut) => isSignedIn => {
     }
 }
 
-export function signIn(cb) {
+export function signIn(onSuccess, onError) {
     // Ideally the button should only show up after gapi.client.init finishes, so that this
     // handler won't be called before OAuth is initialized.
-    return window.gapi.auth2.getAuthInstance().signIn().then(cb);
+    return window.gapi.auth2
+        .getAuthInstance()
+        .signIn()
+        .then(onSuccess, onError);
 }
 
 export function signOut() {
-    console.log('signing out..')
     window.gapi.auth2.getAuthInstance().signOut();
 }

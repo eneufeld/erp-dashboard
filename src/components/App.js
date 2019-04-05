@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useCallback } from 'react';
 import './App.css';
 import { initClient } from '../auth'
 import { UserContext } from './UserContext';
@@ -29,18 +29,19 @@ const App = () => {
   const [isSigningIn, setSigningIn] = useState(false);
   const [isSignedIn, setSignedIn] = useState(null)
   const [user, setUser] = useState(null)
+  const onSignOut = useCallback(() => {
+    setSigningIn(false);
+    setSignedIn(false);
+    setUser(null);
+  });
   useEffect(
     () => {
-      const onSignIn = (isSignedIn, user) => {
+      const onSignInSuccess = (isSignedIn, user) => {
         setSignedIn(isSignedIn);
         setSigningIn(false);
         setUser(user);
       };
-      const onSignOut = () => {
-        setSignedIn(false);
-        setUser(null);
-      };
-      window.gapi.load('client', initClient(onSignIn, onSignOut));
+      window.gapi.load('client', initClient(onSignInSuccess, onSignOut));
       return () => {
         setSignedIn(false);
         setUser(null);
@@ -55,7 +56,13 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <UserContext.Provider value={{
           isSignedIn,
-          signIn,
+          signIn: () => {
+            setSigningIn(true);
+            signIn(
+              () => { },
+              onSignOut
+            );
+          },
           signOut,
           isSigningIn,
           user

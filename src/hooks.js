@@ -3,7 +3,7 @@ import { UserContext } from "./components/UserContext";
 import { loadSheetData } from './sheet';
 
 export function useTimePlanningSheet(range) {
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
     const [error, setError] = useState(undefined)
     const [data, setData] = useState([])
     const { isSignedIn } = useContext(UserContext)
