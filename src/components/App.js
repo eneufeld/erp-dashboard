@@ -8,7 +8,10 @@ import { blue, red, green } from '@material-ui/core/colors';
 import Dashboard from './Dashboard';
 
 const theme = createMuiTheme({
-   palette: {
+  typography: {
+    useNextVariants: true
+  },
+  palette: {
     primary: blue,
     secondary: green,
     error: red,
@@ -18,11 +21,11 @@ const theme = createMuiTheme({
     // Used to shift a color's luminance by approximately
     // two indexes within its tonal palette.
     // E.g., shift from Red 500 to Red 300 or Red 700.
-    tonalOffset: 0.2,
+    tonalOffset: 0.2
   },
   appBar: {
-    height: 60,
-  },
+    height: 60
+  }
 });
 
 const App = () => {

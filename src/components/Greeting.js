@@ -1,11 +1,5 @@
 import React from 'react';
-import { Typography, withStyles } from "@material-ui/core";
-
-const styles = {
-    greeting: {
-        margin: 10
-    }
-}
+import Title from './Title'
 
 const Greeting = ({ classes, user }) => {
     if (!user) {
@@ -13,10 +7,12 @@ const Greeting = ({ classes, user }) => {
     }
     const userName = user.getBasicProfile().getGivenName();
     return (
-        <Typography variant="h3" className={classes.greeting}>
-            Hello, {userName}!<span role="img" aria-label={`Hello ${userName}`}>👋</span>
-        </Typography>
+        <Title
+            variant="h4"
+            title={`Hello, ${userName}!`}
+            emoji="👋"
+        />
     )
 }
 
-export default withStyles(styles)(Greeting);
+export default Greeting;

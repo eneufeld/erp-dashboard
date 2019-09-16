@@ -4,10 +4,12 @@ import { IconButton, SnackbarContent, withStyles } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { green } from '@material-ui/core/colors';
 
 
 const variantIcon = {
-//  success: CheckCircleIcon,
+  success: CheckCircleIcon,
 //  warning: WarningIcon,
   error: ErrorIcon,
 //  info: InfoIcon,
@@ -16,6 +18,9 @@ const variantIcon = {
 const styles = theme => ({
   error: {
     backgroundColor: red[400]
+  },
+  success: {
+    backgroundColor: green[400],
   },
   icon: {
     fontSize: 20,
