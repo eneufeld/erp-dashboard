@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.status_good {
+  color:#81c784
+}
+.status_bad {
+  color:#e57373;
+}
+.center {
+  text-align: center;
+  align-self: center;
+}
+.right {
+  text-align: right;
+}

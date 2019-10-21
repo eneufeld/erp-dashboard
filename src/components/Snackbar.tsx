@@ -1,6 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
-import { IconButton, SnackbarContent, withStyles } from '@material-ui/core';
+import { IconButton, SnackbarContent, withStyles, Theme } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
@@ -8,14 +7,12 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { green } from '@material-ui/core/colors';
 
 
-const variantIcon = {
+const variantIcon:any = {
   success: CheckCircleIcon,
-//  warning: WarningIcon,
   error: ErrorIcon,
-//  info: InfoIcon,
 };
 
-const styles = theme => ({
+const styles = (theme:Theme) => ({
   error: {
     backgroundColor: red[400]
   },
@@ -27,7 +24,7 @@ const styles = theme => ({
   },
   iconVariant: {
     opacity: 0.9,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(2),
   },
   message: {
     display: 'flex',
@@ -35,17 +32,18 @@ const styles = theme => ({
   },
 });
 
-function SnackbarContentWrapper(props) {
+
+const SnackbarContentWrapper:React.FC<any> = (props) =>{
   const { classes, className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
 
   return (
     <SnackbarContent
-      className={classNames(classes[variant], className)}
+      className={`${classes[variant]} ${className}`}
       aria-describedby="client-snackbar"
       message={
-        <span id="client-snackbar" className={classes.message}>
-          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+        <span id="client-snackbar" className={classes!.message}>
+          <Icon className={`${classes.icon} ${classes.iconVariant}`} />
           {message}
         </span>
       }
