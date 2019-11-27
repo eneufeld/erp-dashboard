@@ -9,7 +9,7 @@
     "googleapis": "^43.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
+    "react-scripts": "^3.1.1",
     "react-table": "^6.10.3",
     "typescript": "3.6.3"
   },
