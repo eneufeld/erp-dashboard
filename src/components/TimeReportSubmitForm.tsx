@@ -42,17 +42,49 @@ class TimeReportSubmitForm extends React.Component<TimeReportProps, TimeReportSt
   }
 
   handleChange = (ev:any) => {
-    const text = ev.target.value;
+    const text = ev.target.value as string;
     this.setState({ text  })
-    const rows = text.split(/\r?\n/).filter((r:string) => r.length > 0);
+
+    if (this.isManicTimeString(text)){
+      this.parseManicTime(text);
+    } else {
+      this.parseHamster(text, );
+    }
+  }
+
+  private isManicTimeString(text: string): boolean {
+    return text.startsWith('"');
+  }
+
+  private parseManicTime(text: string) {
+    const rows = text.split(/\r?\n/).filter(r => r.length > 0 && !r.startsWith("\"Total\"")).map(row => row.substr(1, row.length - 2));
+    const firstRow = rows[0].split(/"\t"/)
+    const employee = firstRow[0];
+    const date = firstRow[1];
+    const dataRows = rows.slice(1);
+    const tableEntries:TimeEntry[] = dataRows.map(row => {
+      const cells = row.split(/"\t"/);
+      return createTimeEntry([date, cells[0], employee, employee, cells[1], cells.length === 4?cells[3]:''])
+    });
+    const e:any[][] = dataRows.map(row => {
+      const cells = row.split(/"\t"/)
+      return [date, cells[0], employee, employee, Number(cells[1]), cells.length === 4?cells[3]:'']
+    });
+    this.setState({ tableEntries })
+    this.setState({ rawEntries: e})
+  }
+
+  private parseHamster(text: string) {
+    const rows = text.split(/\r?\n/).filter(r => r.length > 0);
     const firstRow = rows[0].split(/\\/)
     const employee = firstRow[0];
     const date = firstRow[1];
-    const tableEntries:TimeEntry[] = rows.slice(1).map((row:any) => {
+    const dataRows = rows.slice(1);
+    const tableEntries:TimeEntry[] = dataRows.map(row => {
       const cells = row.split(/\\/)
       return createTimeEntry([date, cells[0], employee, employee, cells[1], cells[2]])
     });
-    const e:any[][] = rows.slice(1).map((row:any) => {
+    const e:any[][] = dataRows.map(row => {
       const cells = row.split(/\\/)
       return [date, cells[0], employee, employee, Number(cells[1]), cells[2]]
     });
@@ -61,14 +93,14 @@ class TimeReportSubmitForm extends React.Component<TimeReportProps, TimeReportSt
   }
 
   handleSubmit = (triggerUpdate:any)=> () => {
-    submit(this.state.rawEntries).then(() => {
+    submit(this.state.rawEntries, () => {
       this.setState({
         text: "",
         isSnackbarOpen: true,
         tableEntries: []
       });
       triggerUpdate();
-    })
+    });
   }
 
   handleClear = () => {
